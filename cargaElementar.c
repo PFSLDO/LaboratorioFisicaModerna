@@ -41,24 +41,33 @@ int main() {
                                          3.95E-18
                                         };
   
-  long double cargaElementarExperimental = 1.8*10E-19;
-  long double mediaDiferencasParaInteiros = 10000; //Valor grande aleatorio, apenas para entrar no while
-  float precisaoMedia = 0.0001; //Escolhe precisao da media
+  long double melhorErro = 1e9;
+  long double melhorCarga = 0.0;
   const int numeroDeMedidas = 34;
-
-  while (mediaDiferencasParaInteiros > precisaoMedia) { //Tenta encontrar um valor de media que possua a precisao setada
-    mediaDiferencasParaInteiros = 0.0;
-    cargaElementarExperimental -= 0.001*10E-19; //Descrecimo com passo curto
+  int passos = 100000; // 100 mil passos
+  long double inicio = 1.00E-20;
+  long double fim = 1.00E-18;
+  long double passo = (fim - inicio) / passos;
+  
+  for (int i = 0; i <= passos; i++) {
+      long double e = inicio + i * passo;
+    long double erroTotal = 0.0;
 
     for (int i = 0; i < numeroDeMedidas; i++) {
-      long double numeroDeCargasPorBolha = cargasDasBolhas[i]/cargaElementarExperimental;
-      mediaDiferencasParaInteiros += fabsl(roundl(numeroDeCargasPorBolha) - numeroDeCargasPorBolha); //Calcula a diferenca entre o numero calculado e o inteiro mais proximo
+      long double n = cargasDasBolhas[i] / e;
+      erroTotal += fabsl(roundl(n) - n);
     }
 
-    mediaDiferencasParaInteiros = mediaDiferencasParaInteiros/numeroDeMedidas; //Calcula a media das diferencas com inteiros
+    long double erroMedio = erroTotal / numeroDeMedidas;
+
+    if (erroMedio < melhorErro) {
+      melhorErro = erroMedio;
+      melhorCarga = e;
+    }
   }
 
-  printf("valorQExperimental: %.30Lf c/ media dos desvios: %.25Lf", cargaElementarExperimental, mediaDiferencasParaInteiros);
+  printf("Melhor carga elementar estimada: %.30Le\n", melhorCarga);
+  printf("Com erro médio de: %.15Le\n", melhorErro);
 
   return 0;
 }
