@@ -41,33 +41,24 @@ int main() {
                                          3.95E-18
                                         };
   
-  long double melhorErro = 1e9;
-  long double melhorCarga = 0.0;
-  const int numeroDeMedidas = 34;
-  int passos = 100000; // 100 mil passos
-  long double inicio = 1.00E-20;
-  long double fim = 1.00E-18;
-  long double passo = (fim - inicio) / passos;
-  
-  for (int i = 0; i <= passos; i++) {
-      long double e = inicio + i * passo;
-    long double erroTotal = 0.0;
+  long double cargaElementarExperimental = 1.9E-19L;
+  long double mediaDiferencasParaInteiros = 10000L; //Valor grande aleatorio, apenas para entrar no while
+  long double precisaoMedia = 0.0001L; //Escolhe precisao da media
+  const int numeroDeMedidas = sizeof(cargasDasBolhas) / sizeof(cargasDasBolhas[0]);;
+
+  while (mediaDiferencasParaInteiros > precisaoMedia && cargaElementarExperimental > 1.5E-19L) { //Tenta encontrar um valor de media que possua a precisao setada
+    mediaDiferencasParaInteiros = 0.0;
+    cargaElementarExperimental -= 0.0001E-19L; //Descrecimo com passo curto
 
     for (int i = 0; i < numeroDeMedidas; i++) {
-      long double n = cargasDasBolhas[i] / e;
-      erroTotal += fabsl(roundl(n) - n);
+      long double numeroDeCargasPorBolha = cargasDasBolhas[i]/cargaElementarExperimental;
+      mediaDiferencasParaInteiros += fabsl(roundl(numeroDeCargasPorBolha) - numeroDeCargasPorBolha); //Calcula a diferenca entre o numero calculado e o inteiro mais proximo
     }
 
-    long double erroMedio = erroTotal / numeroDeMedidas;
-
-    if (erroMedio < melhorErro) {
-      melhorErro = erroMedio;
-      melhorCarga = e;
-    }
+    mediaDiferencasParaInteiros /= numeroDeMedidas; //Calcula a media das diferencas com inteiros
   }
 
-  printf("Melhor carga elementar estimada: %.30Le\n", melhorCarga);
-  printf("Com erro médio de: %.15Le\n", melhorErro);
+  printf("valorQExperimental: %.30Lf c/ media dos desvios: %.25Lf", cargaElementarExperimental, mediaDiferencasParaInteiros);
 
   return 0;
 }
