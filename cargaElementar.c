@@ -41,14 +41,14 @@ int main() {
                                          3.95E-18
                                         };
   
-  long double cargaElementarExperimental = 1.9E-19L;
-  long double mediaDiferencasParaInteiros = 10000L; //Valor grande aleatorio, apenas para entrar no while
-  long double precisaoMedia = 0.0001L; //Escolhe precisao da media
-  const int numeroDeMedidas = sizeof(cargasDasBolhas) / sizeof(cargasDasBolhas[0]);;
+  long double cargaElementarExperimental = 1.9E-19;
+  long double mediaDiferencasParaInteiros = 10000; //Valor grande aleatorio, apenas para entrar no while
+  long double precisaoMedia = 0.001; //Escolhe precisao da media
+  const int numeroDeMedidas = sizeof(cargasDasBolhas) / sizeof(cargasDasBolhas[0]);
 
-  while (mediaDiferencasParaInteiros > precisaoMedia && cargaElementarExperimental > 1.5E-19L) { //Tenta encontrar um valor de media que possua a precisao setada
+  while (mediaDiferencasParaInteiros > precisaoMedia) { //Tenta encontrar um valor de media que possua a precisao setada
     mediaDiferencasParaInteiros = 0.0;
-    cargaElementarExperimental -= 0.0001E-19L; //Descrecimo com passo curto
+    cargaElementarExperimental -= 0.0001E-19; //Descrecimo com passo curto
 
     for (int i = 0; i < numeroDeMedidas; i++) {
       long double numeroDeCargasPorBolha = cargasDasBolhas[i]/cargaElementarExperimental;
